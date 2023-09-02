@@ -1,0 +1,9 @@
+{
+    "title": "custom_role_pa_gcs_ps_privileged",
+    "description": "Privileged role for a Cloud Function to publish to Pub/Sub, read from GCS, and other tasks.",
+    "stage": "ALPHA",
+    "includedPermissions": [
+      "pubsub.topics.publish",
+      "storage.objects.get"
+    ]
+}
