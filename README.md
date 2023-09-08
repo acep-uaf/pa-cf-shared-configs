@@ -68,6 +68,11 @@ Make sure to replace `<PATH_TO_SERVICE_ACCOUNT_KEY_JSON>` with the correct path 
 Ensure the script is executable:
 
 ```
-chmod +x <script_name>.sh
+chmod +x sa_role_create_bind.sh
 ```
 
+Run the script:
+
+```
+./sa_role_create_bind.sh
+```
