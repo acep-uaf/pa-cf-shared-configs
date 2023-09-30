@@ -14,7 +14,7 @@ For the Google Cloud Platform, roles can be custom-tailored to provide specific 
 
 ### deploy.json
 
-```
+```bash
 {
   "title": "your_custom_deploy",
   "description": "Base role for deploying a Cloud Function.",
@@ -33,7 +33,7 @@ For the Google Cloud Platform, roles can be custom-tailored to provide specific 
 
 ### privilege.json
 
-```
+```bash
 {
     "title": "your_custom_role_privileged",
     "description": "Privileged role for a Cloud Function to publish to Pub/Sub, read from GCS, and other tasks.",
@@ -111,7 +111,7 @@ After running the script, a key from the created deploy service account needs to
 
 You can achieve this using the gcloud CLI as follows:
 
-```
+```bash
 gcloud secrets versions add $SECRET_NAME --data-file=<PATH_TO_SERVICE_ACCOUNT_KEY_JSON>
 ```
 
@@ -121,15 +121,16 @@ Make sure to replace `<PATH_TO_SERVICE_ACCOUNT_KEY_JSON>` with the correct path 
 
 Ensure the script is executable:
 
-```
+```bash
 chmod +x sa_role_create_bind.sh
 ```
 
 Run the script:
 
-```
+```bash
 ./sa_role_create_bind.sh
 ```
+
 
 Follow the on-screen prompts to provide the path to your .env file.
 
