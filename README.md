@@ -68,7 +68,8 @@ When running the script, you'd specify the path to the particular `.env` file yo
 
 Example `.env` file:
 
-```# The ID of your Google Cloud Project
+```bash
+# The ID of your Google Cloud Project
 PROJECT_ID="your-gcp-project-id"
 
 # The name of the custom role for deploying the Cloud Function
