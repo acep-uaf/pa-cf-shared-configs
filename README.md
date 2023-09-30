@@ -66,33 +66,50 @@ To keep things organized, it's a good idea to have a dedicated directory, such a
 
 When running the script, you'd specify the path to the particular `.env` file you want to use, ensuring that the correct configurations are applied for each cloud function deployment.
 
-Example `.env` file:
+### .env File Configuration
+Before deploying the Cloud Function, ensure that the eiedeploy.env file contains the necessary environment variables, as the deployment script sources this file. This file should define values for:
 
 ```bash
-# The ID of your Google Cloud Project
-PROJECT_ID="your-gcp-project-id"
-
-# The name of the custom role for deploying the Cloud Function
-DEPLOY_ROLE_NAME="your-custom-role-for-deploying-cloud-function"
-
-# The path to the JSON file defining the permissions for the deployment role
-DEPLOY_ROLE_FILE="path-to-your-deployment-role-definition.json"
-
-# The name of the custom role for privileged operations, like publishing messages
-PRIVILEGED_ROLE_NAME="your-custom-role-for-privileged-operations"
-
-# The path to the JSON file defining the permissions for the privileged role
-PRIVILEGED_ROLE_FILE="path-to-your-privileged-role-definition.json"
-
-# The name of the service account used to deploy the Cloud Function
-DEPLOY_SA_NAME="your-deploy-service-account-name"
-
-# The name of the privileged service account used for high-privileged operations
-PRIVILEGED_SA_NAME="your-privileged-service-account-name"
-
-# The name of the secret that holds the credentials for the deploy service account
-SECRET_NAME="name-of-your-secret-for-deploy-service-account-credentials"
+PROJECT_ID=<value>
+DEPLOY_ROLE_NAME=<value>
+DEPLOY_ROLE_FILE=<value>
+PRIVILEGED_ROLE_NAME=<value>
+PRIVILEGED_ROLE_FILE=<value>
+DEPLOY_SA_NAME=<value>
+PRIVILEGED_SA_NAME=<value>
+SECRET_NAME=<value>
 ```
+
+Replace `<value>` with the appropriate values for your deployment.
+
+### Environment Variable Descriptions
+Below are descriptions for each environment variable used in the deployment script:
+
+- **PROJECT_ID**=`<value>`:
+  - Description: The ID of your Google Cloud Project.
+
+- **DEPLOY_ROLE_NAME**=`<value>`:
+  - Description: The name of the custom role for deploying the Cloud Function.
+
+- **DEPLOY_ROLE_FILE**=`<value>`:
+  - Description: The path to the JSON file defining the permissions for the deployment role.
+
+- **PRIVILEGED_ROLE_NAME**=`<value>`:
+  - Description: The name of the custom role for privileged operations, like publishing messages.
+
+- **PRIVILEGED_ROLE_FILE**=`<value>`:
+  - Description: The path to the JSON file defining the permissions for the privileged role.
+
+- **DEPLOY_SA_NAME**=`<value>`:
+  - Description: The name of the service account used to deploy the Cloud Function.
+
+- **PRIVILEGED_SA_NAME**=`<value>`:
+  - Description: The name of the privileged service account used for high-privileged operations.
+
+- **SECRET_NAME**=`<value>`:
+  - Description: The name of the secret that holds the credentials for the deploy service account.
+
+Set each `<value>` in the `eiedeploy.env` file appropriately before deploying the Cloud Function. 
 
 **Note:** Do not expose the .env file or commit it to public repositories to maintain the confidentiality of the information.  Always ensure that this directory is included in your `.gitignore` or equivalent to prevent accidental commits to version control.
 
