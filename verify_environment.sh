@@ -44,8 +44,8 @@ echo "Checking for IAM Bindings..."
 DEPLOY_BINDINGS=$(gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --format='table(bindings.role,bindings.members)' | grep $DEPLOY_SA_EMAIL || echo "")
 PRIVILEGED_BINDINGS=$(gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --format='table(bindings.role,bindings.members)' | grep $PRIVILEGED_SA_EMAIL || echo "")
 
-[ -z "$DEPLOY_BINDINGS" ] && echo "No bindings found for $DEPLOY_SA_NAME." || echo "Bindings exist for $DEPLOY_SA_NAME."
-[ -z "$PRIVILEGED_BINDINGS" ] && echo "No bindings found for $PRIVILEGED_SA_NAME." || echo "Bindings exist for $PRIVILEGED_SA_NAME."
+[ -z "$DEPLOY_BINDINGS" ] && echo "No bindings found for $DEPLOY_SA_NAME." || { echo "Bindings exist for $DEPLOY_SA_NAME:"; echo "$DEPLOY_BINDINGS"; }
+[ -z "$PRIVILEGED_BINDINGS" ] && echo "No bindings found for $PRIVILEGED_SA_NAME." || { echo "Bindings exist for $PRIVILEGED_SA_NAME:"; echo "$PRIVILEGED_BINDINGS"; }
 
 # Check for Secrets
 echo "Checking for Secrets..."
