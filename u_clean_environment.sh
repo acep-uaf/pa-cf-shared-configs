@@ -14,8 +14,7 @@ PRIVILEGED_SA_EMAIL="${PRIVILEGED_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com
 
 # Check for leftover bindings and unbind if needed *IMPORTANT NOTE: unbinding the roles prior to 
 # service account deletion insures the roles are not left bound to a service account in a deleted state.
- of the service 
-#account *
+
 unbind_role_from_service_account() {
     local ROLE_NAME=$1
     local SA_EMAIL=$2
