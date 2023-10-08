@@ -70,15 +70,30 @@ bind_role_to_service_account() {
 bind_role_to_service_account $DEPLOY_ROLE_NAME $DEPLOY_SA_EMAIL
 bind_role_to_service_account $PRIVILEGED_ROLE_NAME $PRIVILEGED_SA_EMAIL
 
+# ... [the rest of your script up to secret creation]
+
 # Create the secret if it doesn't exist
 SECRET_EXISTS=$(gcloud secrets describe $SECRET_NAME --project=$PROJECT_ID 2>&1 | grep "name:")
 
 if [ -z "$SECRET_EXISTS" ]; then
-    # Create the secret (note: actual key data needs to be added in a separate command, e.g., through gcloud secrets versions add)
+    # Create the secret
     gcloud secrets create $SECRET_NAME --replication-policy="automatic" --project=$PROJECT_ID --quiet
     echo "Secret $SECRET_NAME has been created."
+    
+    # Generate a new key for the deploy service account
+    SA_KEY_FILE="/tmp/sa_key.json"  # Temporary file to hold the SA key
+    gcloud iam service-accounts keys create $SA_KEY_FILE --iam-account $DEPLOY_SA_EMAIL --project=$PROJECT_ID --quiet
+    echo "Service account key for $DEPLOY_SA_EMAIL has been created."
+
+    # Populate the secret with the service account key
+    gcloud secrets versions add $SECRET_NAME --data-file="$SA_KEY_FILE" --project=$PROJECT_ID --quiet
+    echo "Added service account key to the secret $SECRET_NAME."
+    
+    # Clean up the temporary SA key file
+    rm -f $SA_KEY_FILE
 fi
 
 # Grant access to the secret for the deploy service account
 gcloud secrets add-iam-policy-binding $SECRET_NAME --project=$PROJECT_ID --role roles/secretmanager.secretAccessor --member serviceAccount:$DEPLOY_SA_EMAIL --quiet
-echo "Granted secretAccessor role for secret $SECRET_NAME to $DEPLOY_SA_NAME." 
+echo "Granted secretAccessor role for secret $SECRET_NAME to $DEPLOY_SA_NAME."
+ 
