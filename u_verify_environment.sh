@@ -1,11 +1,32 @@
 #!/bin/bash
-set -e
 
-# Source the .env file
+# Prompt for the .env file to use
 echo "Enter the path to the .env file to use (e.g. ./myenvfile.env):"
 read ENV_FILE
+
+# Check if the provided .env file exists and is readable
+if [[ ! -f "$ENV_FILE" || ! -r "$ENV_FILE" ]]; then
+    echo "Error: .env file either does not exist or is not readable."
+    exit 1
+fi
+
+# Source the .env file
 source $ENV_FILE
-echo "Loaded environment variables from $ENV_FILE"
+
+# Check if required variables are set
+declare -a required_vars=("PROJECT_ID" "DEPLOY_ROLE_NAME" "DEPLOY_ROLE_FILE" "PRIVILEGED_ROLE_NAME" "PRIVILEGED_ROLE_FILE" "DEPLOY_SA_NAME" "PRIVILEGED_SA_NAME" "SECRET_NAME")
+unset_vars=()
+
+for var in "${required_vars[@]}"; do
+    if [[ -z "${!var}" ]]; then
+        unset_vars+=("$var")
+    fi
+done
+
+if [[ ${#unset_vars[@]} -ne 0 ]]; then
+    echo "Error: The following variables are not set in the provided .env file: ${unset_vars[@]}"
+    exit 1
+fi
 
 # Set the emails for the service accounts
 DEPLOY_SA_EMAIL="${DEPLOY_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
