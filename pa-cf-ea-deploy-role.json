@@ -3,12 +3,6 @@
     "description": "Role for deploying a Cloud Function dependent on eventarc for triggers.",
     "stage": "ALPHA",
     "includedPermissions": [
-      "cloudfunctions.functions.create",
-      "cloudfunctions.functions.update",
-      "cloudfunctions.functions.get",
-      "cloudfunctions.functions.list",
-      "cloudfunctions.operations.get",
-      "cloudfunctions.operations.list",
       "eventarc.events.receiveEvent",
       "run.routes.invoke"
     ]
