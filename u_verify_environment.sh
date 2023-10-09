@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Check if gcloud command is available
+if ! command -v gcloud &> /dev/null; then
+    echo "Error: gcloud command not found. Please install the Google Cloud SDK and ensure 'gcloud' is in your PATH."
+    exit 1
+fi
+
+# Check gcloud authentication
+gcloud auth list &> /dev/null
+if [ $? -ne 0 ]; then
+    echo "Error: Not authenticated to gcloud. Please authenticate using 'gcloud auth login' and ensure you have the necessary permissions."
+    exit 1
+fi
+
 # Prompt for the .env file to use
 echo "Enter the path to the .env file to use (e.g. ./myenvfile.env):"
 read ENV_FILE
