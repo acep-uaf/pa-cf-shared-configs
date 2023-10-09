@@ -119,7 +119,9 @@ if [ -z "$SECRET_EXISTS" ]; then
     echo "Secret $SECRET_NAME has been created."
     
     # Generate a new key for the deploy service account
-    SA_KEY_FILE="/tmp/sa_key.json"  # Temporary file to hold the SA key
+    SA_KEY_FILE=$(mktemp /tmp/sa_key.XXXXXX.json)  # Unique temporary file
+    chmod 600 $SA_KEY_FILE  # Restrictive permissions
+
     gcloud iam service-accounts keys create $SA_KEY_FILE --iam-account $DEPLOY_SA_EMAIL --project=$PROJECT_ID --quiet
     echo "Service account key for $DEPLOY_SA_EMAIL has been created."
 
