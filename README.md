@@ -40,3 +40,53 @@ Before utilizing the scripts in this toolkit, please ensure the following:
 
 7. **Safety First**: Always review any script, especially those that make changes to permissions and resources, before executing them. Understand each step it takes and confirm that its actions align with your desired configurations and best practices.
 
+## Script Details
+
+### 1. u_backup_iam_policy.sh
+
+Preserving your GCP IAM policy settings is crucial, and this script ensures you have a backup:
+
+- **Backup Creation**: Captures the current IAM policy settings of your GCP project then and saves them in a local file.
+- **Safety Net**: Before making significant changes, running this script provides a safety net, ensuring you can revert if needed.
+
+Usage:
+```bash
+./u_backup_iam_policy.sh
+```
+
+### 2. u_sa_role_create_bind.sh
+
+This script automates the foundational IAM setup:
+
+- **IAM Roles**: It either creates or updates custom IAM roles based on the provided JSON role definitions.
+- **Service Accounts**: Creates necessary service accounts if they don't already exist.
+- **Role Bindings**: It binds the custom roles to the respective service accounts.
+- **Secrets**: A GCP secret is created or updated then populated with the deploy service account key which is used for permission elevation for impersonation.
+
+Usage:
+```bash
+./u_sa_role_create_bind.sh
+```
+
+### 3. u_verify_environment.sh
+A diagnostic utility to validate your GCP environment:
+
+- **Configuration Checks**: Compares the current GCP environment's IAM settings against the configurations specified in the .env file.
+- **Feedback**: Provides feedback on discrepancies or confirms if everything is in order.
+
+Usage:
+```bash
+./u_verify_environment.sh
+```
+
+### 4. u_clean_environment.sh
+When a reset is needed, this script steps in to clean up:
+
+- **Unbinding Roles**: Removes the role bindings associated with the service accounts.
+- **Service Account Deletion**: Deletes the service accounts specified in the .env file.
+- **Secret Removal**: Deletes the secrets created in the setup phase.
+
+Usage:
+```bash
+./u_clean_environment.sh
+```
