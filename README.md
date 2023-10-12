@@ -40,6 +40,56 @@ Before utilizing the scripts in this toolkit, please ensure the following:
 
 7. **Safety First**: Always review any script, especially those that make changes to permissions and resources, before executing them. Understand each step it takes and confirm that its actions align with your desired configurations and best practices.
 
+## Configuration: .env File & role.json Files
+
+The efficiency and customizability of the toolkit largely hinge on the `.env` and `role.json` files, which provide the critical configurations guiding the scripts' operations.
+
+### .env File
+
+The `.env` files act as configuration blueprints, containing key-value pairs that dictate various parameters for the scripts. Here's an illustrative example of a `.env` file:
+
+```bash
+PROJECT_ID=<value>
+DEPLOY_ROLE_NAME=<value>
+DEPLOY_ROLE_FILE=<value>
+PRIVILEGED_ROLE_NAME=<value>
+PRIVILEGED_ROLE_FILE=<value>
+DEPLOY_SA_NAME=<value>
+PRIVILEGED_SA_NAME=<value>
+SECRET_NAME=<value>
+```
+
+Replace <value> with the appropriate values for your deployment.
+
+### Environment Variable Descriptions
+
+Below are descriptions for each environment variable used in the deployment script:
+
+**PROJECT_ID**=`<value>`:
+- Description: The ID of your Google Cloud Project.
+
+**DEPLOY_ROLE_NAME**=`<value>`:
+- Description: Specifies the name for the custom role related to deployments.
+
+**DEPLOY_ROLE_FILE**=`<value>`:
+- Description: Path to the JSON file that contains the definition for the custom deployment role.
+
+**PRIVILEGED_ROLE_NAME**=`<value>`:
+- Description: Specifies the name for a more privileged custom role.
+
+**PRIVILEGED_ROLE_FILE**=`<value>`:
+- Description: Path to the JSON file that contains the definition for the privileged role.
+
+**DEPLOY_SA_NAME**=`<value>`:
+- Description: Name for the service account that will be associated with the custom deployment role.
+
+**PRIVILEGED_SA_NAME**=`<value>`:
+- Description: Name for the service account that will be associated with the more privileged custom role.
+
+**SECRET_NAME**=`<value>`:
+- Description: Specifies the name of the secret for storing service account keys.
+
+
 ## Script Details
 
 ### 1. u_backup_iam_policy.sh
