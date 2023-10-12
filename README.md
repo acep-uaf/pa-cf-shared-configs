@@ -2,9 +2,7 @@
 
 <br>
 
-Welcome to the GCP Service Account Creation Role Binding and Secret Generation for PoLP Impersonation
- toolkit – a suite of scripts designed for automating the creation, verification, and cleanup of roles, service accounts, and secrets on Google Cloud Platform (GCP). This toolkit epitomizes the principles of streamlined operations and effective permissions management, making it easier to implement the Principle of Least Privilege (PoLP) and maintain a secure and organized GCP environment.
-
+Welcome to the GCP Role Binding, Service Account Creation, and Secret Generation Toolkit for PoLP Impersonation. This collection of scripts is crafted to simplify the processes of creating, verifying, and managing roles, service accounts, and secrets on the Google Cloud Platform (GCP). Emphasizing streamlined operations and robust permission oversight, this toolkit assists in efficiently upholding the Principle of Least Privilege (PoLP) for a safer and well-ordered GCP setup.
 
 ## Overview
 
