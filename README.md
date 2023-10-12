@@ -89,6 +89,41 @@ Below are descriptions for each environment variable used in the deployment scri
 **SECRET_NAME**=`<value>`:
 - Description: Specifies the name of the secret for storing service account keys.
 
+Given the modular nature of cloud functions and various GCP resources, you might have multiple .env files, each tailored for distinct configurations. Remember to provide the appropriate .env file path when prompted by the scripts.
+
+## Role Configuration Files
+
+Roles in GCP are sets of permissions that can be granted to specific Google Cloud resources. The role.json files allow you to define custom roles with granular permissions tailored to your application's needs. Here are illustrative examples of role configurations:
+
+### deploy-role.json:
+
+```bash
+{
+  "title": "custom_role_deploy",
+  "description": "Role for deploying a Cloud Function.",
+  "stage": "ALPHA",
+  "includedPermissions": [
+    "cloudfunctions.functions.create",
+    "cloudfunctions.functions.update"
+  ]
+}
+```
+
+### privileged-role.json:
+
+```bash
+{
+  "title": "custom_role_privileged",
+  "description": "Privileged role with broader permissions.",
+  "stage": "ALPHA",
+  "includedPermissions": [
+    "storage.objects.get",
+    "pubsub.topics.publish"
+  ]
+}
+```
+
+Make sure the role files are located in the same directory as the scripts, or adjust the paths in the `.env` file accordingly.
 
 ## Script Details
 
