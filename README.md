@@ -207,3 +207,48 @@ Encountering issues while deploying or using the toolkit? Below are some common 
 Remember to check for typos, errors in file paths, or missing configurations in the `.env` file as they can be the root of many issues.
 
 
+## FAQ (Frequently Asked Questions)
+
+1. **What is the purpose of the `.env` file in this toolkit?**
+    - The `.env` file acts as a configuration blueprint, containing key-value pairs that dictate various parameters for the scripts. It provides an easy way to set and modify configurations without altering the scripts themselves.
+
+2. **Can I use this toolkit for multiple GCP projects simultaneously?**
+    - Yes, you can. Create separate `.env` files for each project and specify the path to the appropriate file when prompted by the scripts.
+
+3. **Is there a risk of overwriting existing IAM roles or service accounts?**
+    - The toolkit is designed to either create or update roles and service accounts based on the configurations in the `.env` file. Always ensure the names specified in the `.env` file are unique to avoid overwriting existing resources.
+
+4. **Why do I need to backup my IAM settings?**
+    - Taking a backup provides a safety net. In case of any unexpected changes or errors during setup, you can revert to the previous IAM settings. It's a good practice, especially in production environments.
+
+5. **How often should I run the `u_verify_environment.sh` script?**
+    - Run it whenever you make changes to the IAM settings or after executing other scripts in the toolkit. It helps ensure your environment aligns with your intended configurations.
+
+6. **What should I do if I accidentally deleted my backup IAM policy file?**
+    - If the backup is lost and you haven't made changes yet, you can re-run the `u_backup_iam_policy.sh` script. If changes have been made, review them carefully and consider manually reverting undesired changes.
+
+7. **Is this toolkit compatible with other cloud providers, like AWS or Azure?**
+    - This toolkit is specifically designed for Google Cloud Platform (GCP). While some concepts might be similar, you'd need different toolkits or scripts for other cloud providers.
+
+8. **Does this toolkit handle multi-region deployments?**
+    - The toolkit is designed to work at the GCP project level. Multi-region considerations, like data residency, are based on individual GCP service configurations and are outside the scope of this toolkit.
+
+9. **Do I incur any charges using this toolkit on GCP?**
+    - While the toolkit itself is free, some operations, like creating secrets or service accounts, might have associated costs on GCP. Always check GCP's pricing documentation to understand potential charges.
+
+10. **Can I bind (use) the same role with different `.env` files and service accounts?**
+    - Yes, you can. Roles in GCP define a set of permissions, and these roles can be bound to multiple service accounts across different `.env` configurations. However, ensure that the `role.json` file defining the role remains consistent across your different configurations to maintain uniform permissions.
+
+<br>
+
+## Conclusion
+
+---
+
+GCP's IAM system is designed with granularity and flexibility in mind, and the scripts in this toolkit leverage these characteristics to ensure that permissions are finely-tuned, following the Principle of Least Privilege (PoLP). The scripts adhere to the principle of granting only the essential permissions necessary for deployment, ensuring a secure environment. Through the use of impersonation, they facilitate controlled permission elevation, allowing tasks to be performed without permanently granting elevated rights.
+
+Moreover, the ability to save your project's IAM policy provides a safety net, ensuring that configurations can be reverted if required. The `u_verify_environment.sh` script provides the sanity check for cross-referencing your current configurations against desired states, helping you catch discrepancies before they turn problematic. Lastly, with `u_clean_environment.sh`, you have the convenience of effortlessly tearing down configurations, ensuring a clean slate when needed.
+
+By integrating these scripts into your workflow, not only do you bolster your GCP environment's security, but you also streamline the management of roles, service accounts, and bindings. Ultimately, the toolkit epitomizes efficiency, security, and the ease of IAM management on Google Cloud Platform.
+
+---
