@@ -175,3 +175,35 @@ Usage:
 ```bash
 ./u_clean_environment.sh
 ```
+
+## Troubleshooting
+
+Encountering issues while deploying or using the toolkit? Below are some common problems and their solutions:
+
+1. **Script Execution Failure**:
+    - **Symptom**: You get a "Permission Denied" error when trying to run a script.
+    - **Solution**: Ensure the script has execute permissions. Run `chmod +x <script_name>.sh` to grant execute permissions.
+
+2. **Authentication Issues**:
+    - **Symptom**: Errors related to insufficient permissions or unauthorized access.
+    - **Solution**: Confirm you're authenticated to the correct GCP account, and you've set the desired project. Double-check the permissions associated with your authenticated account.
+
+3. **Role/Service Account Creation Failure**:
+    - **Symptom**: The script is unable to create a role or service account.
+    - **Solution**: Ensure your authenticated GCP account has necessary permissions to create roles and service accounts. Verify the role or service account names in the `.env` file do not already exist.
+
+4. **Secret Creation Issues**:
+    - **Symptom**: Errors related to secret creation or update.
+    - **Solution**: Double-check the `SECRET_NAME` variable in the `.env` file for any typos. Ensure you have permissions to create and manage secrets in GCP.
+
+5. **Discrepancies in Verification**:
+    - **Symptom**: The `u_verify_environment.sh` script indicates discrepancies between your environment and `.env` file configurations.
+    - **Solution**: Double-check your `.env` file's configurations and ensure they align with your intended setup. Confirm you are authenticated to the correct project. Re-run the setup script if needed.
+
+6. **Unable to Delete Resources with Cleanup Script**:
+    - **Symptom**: The `u_clean_environment.sh` script is unable to delete certain resources.
+    - **Solution**: Manually check if the resources (roles, service accounts, secrets) exist in your GCP environment. Ensure you have necessary permissions to delete the resources and confirm you are authenticated to the correct project.
+
+Remember to check for typos, errors in file paths, or missing configurations in the `.env` file as they can be the root of many issues.
+
+
