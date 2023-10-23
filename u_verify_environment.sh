@@ -26,26 +26,10 @@ fi
 # Source the .env file
 source $ENV_FILE
 
-# Check if required variables are set
-declare -a required_vars=("PROJECT_ID" "DEPLOY_ROLE_NAME" "DEPLOY_ROLE_FILE" "PRIVILEGED_ROLE_NAME" "PRIVILEGED_ROLE_FILE" "DEPLOY_SA_NAME" "PRIVILEGED_SA_NAME" "SECRET_NAME")
-unset_vars=()
-
-for var in "${required_vars[@]}"; do
-    if [[ -z "${!var}" ]]; then
-        unset_vars+=("$var")
-    fi
-done
-
-if [[ ${#unset_vars[@]} -ne 0 ]]; then
-    echo "Error: The following variables are not set in the provided .env file: ${unset_vars[@]}"
-    exit 1
-fi
-
-# Set the emails for the service accounts
+# Set the email for the deploy service account
 DEPLOY_SA_EMAIL="${DEPLOY_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
-PRIVILEGED_SA_EMAIL="${PRIVILEGED_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-# Check for IAM Roles
+# Check for IAM Role for deploy
 echo "Checking for IAM Roles..."
 if gcloud iam roles list --project=$PROJECT_ID | grep -q $DEPLOY_ROLE_NAME; then
     echo "Role $DEPLOY_ROLE_NAME exists."
@@ -53,13 +37,7 @@ else
     echo "Role $DEPLOY_ROLE_NAME does not exist."
 fi
 
-if gcloud iam roles list --project=$PROJECT_ID | grep -q $PRIVILEGED_ROLE_NAME; then
-    echo "Role $PRIVILEGED_ROLE_NAME exists."
-else
-    echo "Role $PRIVILEGED_ROLE_NAME does not exist."
-fi
-
-# Check for Service Accounts
+# Check for Service Account for deploy
 echo "Checking for Service Accounts..."
 if gcloud iam service-accounts list --project=$PROJECT_ID | grep -q $DEPLOY_SA_EMAIL; then
     echo "Service account $DEPLOY_SA_NAME exists."
@@ -67,19 +45,34 @@ else
     echo "Service account $DEPLOY_SA_NAME does not exist."
 fi
 
-if gcloud iam service-accounts list --project=$PROJECT_ID | grep -q $PRIVILEGED_SA_EMAIL; then
-    echo "Service account $PRIVILEGED_SA_NAME exists."
-else
-    echo "Service account $PRIVILEGED_SA_NAME does not exist."
-fi
-
-# Check for IAM Bindings
+# Check for IAM Bindings for deploy
 echo "Checking for IAM Bindings..."
 DEPLOY_BINDINGS=$(gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --format='table(bindings.role,bindings.members)' | grep $DEPLOY_SA_EMAIL || echo "")
-PRIVILEGED_BINDINGS=$(gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --format='table(bindings.role,bindings.members)' | grep $PRIVILEGED_SA_EMAIL || echo "")
-
 [ -z "$DEPLOY_BINDINGS" ] && echo "No bindings found for $DEPLOY_SA_NAME." || { echo "Bindings exist for $DEPLOY_SA_NAME:"; echo "$DEPLOY_BINDINGS"; }
-[ -z "$PRIVILEGED_BINDINGS" ] && echo "No bindings found for $PRIVILEGED_SA_NAME." || { echo "Bindings exist for $PRIVILEGED_SA_NAME:"; echo "$PRIVILEGED_BINDINGS"; }
+
+# Iterate over each privileged service account and its role
+for index in "${!PRIVILEGED_SA_NAMES[@]}"; do
+    PRIVILEGED_SA_EMAIL="${PRIVILEGED_SA_NAMES[$index]}@${PROJECT_ID}.iam.gserviceaccount.com"
+    PRIVILEGED_ROLE_NAME="${PRIVILEGED_ROLE_NAMES[$index]}"
+
+    # Check for IAM Role
+    if gcloud iam roles list --project=$PROJECT_ID | grep -q $PRIVILEGED_ROLE_NAME; then
+        echo "Role $PRIVILEGED_ROLE_NAME exists."
+    else
+        echo "Role $PRIVILEGED_ROLE_NAME does not exist."
+    fi
+
+    # Check for Service Account
+    if gcloud iam service-accounts list --project=$PROJECT_ID | grep -q $PRIVILEGED_SA_EMAIL; then
+        echo "Service account ${PRIVILEGED_SA_NAMES[$index]} exists."
+    else
+        echo "Service account ${PRIVILEGED_SA_NAMES[$index]} does not exist."
+    fi
+
+    # Check for IAM Bindings
+    PRIVILEGED_BINDINGS=$(gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --format='table(bindings.role,bindings.members)' | grep $PRIVILEGED_SA_EMAIL || echo "")
+    [ -z "$PRIVILEGED_BINDINGS" ] && echo "No bindings found for ${PRIVILEGED_SA_NAMES[$index]}." || { echo "Bindings exist for ${PRIVILEGED_SA_NAMES[$index]}:"; echo "$PRIVILEGED_BINDINGS"; }
+done
 
 # Check for Secrets
 echo "Checking for Secrets..."
