@@ -95,6 +95,10 @@ create_service_account_if_not_exists() {
 # Create deploy service account if it doesn't exist
 create_service_account_if_not_exists $DEPLOY_SA_NAME
 
+# Bind the deploy role to the deploy service account
+gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$DEPLOY_SA_EMAIL" --role="projects/$PROJECT_ID/roles/$DEPLOY_ROLE_NAME" --quiet
+echo "Custom role $DEPLOY_ROLE_NAME has been bound to service account $DEPLOY_SA_EMAIL."
+
 # Loop over privileged service accounts, roles, and role files to set them up
 for index in "${!PRIVILEGED_SA_NAMES[@]}"; do
     PRIVILEGED_SA_NAME=${PRIVILEGED_SA_NAMES[$index]}
