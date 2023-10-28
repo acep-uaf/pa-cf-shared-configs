@@ -1,0 +1,8 @@
+{
+    "title": "custom_role_ps_pub_privileged",
+    "description": "Privileged role for a Cloud Function to publish to Pub/Sub.",
+    "stage": "ALPHA",
+    "includedPermissions": [
+      "pubsub.topics.publish"
+    ]
+}
