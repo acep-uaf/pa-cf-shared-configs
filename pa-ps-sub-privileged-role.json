@@ -1,0 +1,9 @@
+{
+    "title": "custom_role_ps_sub_privileged",
+    "description": "Role for subscribing from Pub/Sub.",
+    "stage": "ALPHA",
+    "includedPermissions": [
+      "pubsub.subscriptions.consume"
+    ]
+  }
+  
