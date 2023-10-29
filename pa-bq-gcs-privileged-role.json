@@ -1,0 +1,13 @@
+{
+    "title": "custom_role_bq_gcs_privileged",
+    "description": "Role for BigQuery operations.",
+    "stage": "ALPHA",
+    "includedPermissions": [
+      "bigquery.datasets.create",
+      "bigquery.datasets.get",
+      "bigquery.datasets.getIamPolicy",
+      "bigquery.jobs.create",
+      "storage.objects.get",
+      "storage.objects.list"
+    ]
+ }
