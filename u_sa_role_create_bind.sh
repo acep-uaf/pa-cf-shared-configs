@@ -59,6 +59,7 @@ if [[ ${#empty_arrays[@]} -ne 0 ]]; then
     exit 1
 fi
 
+
 # Set the email for the deploy service account
 DEPLOY_SA_EMAIL="${DEPLOY_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
@@ -102,12 +103,9 @@ echo "Custom role $DEPLOY_ROLE_NAME has been bound to service account $DEPLOY_SA
 # Loop over privileged service accounts, roles, and role files to set them up
 for index in "${!PRIVILEGED_SA_NAMES[@]}"; do
     PRIVILEGED_SA_NAME=${PRIVILEGED_SA_NAMES[$index]}
-    PRIVILEGED_ROLE_NAME=${PRIVILEGED_ROLE_NAMES[$index]}
-    PRIVILEGED_ROLE_FILE=${PRIVILEGED_ROLE_FILES[$index]}
+    IFS=', ' read -ra ROLE_NAMES_ARRAY <<< "${PRIVILEGED_ROLE_NAMES[$index]}"
+    IFS=', ' read -ra ROLE_FILES_ARRAY <<< "${PRIVILEGED_ROLE_FILES[$index]}"
     PRIVILEGED_SA_EMAIL="$PRIVILEGED_SA_NAME@$PROJECT_ID.iam.gserviceaccount.com"
-
-    # Create or update privileged role
-    create_or_update_role $PRIVILEGED_ROLE_NAME $PRIVILEGED_ROLE_FILE
 
     # Create privileged service account if it doesn't exist
     create_service_account_if_not_exists $PRIVILEGED_SA_NAME
@@ -116,12 +114,19 @@ for index in "${!PRIVILEGED_SA_NAMES[@]}"; do
     gcloud iam service-accounts add-iam-policy-binding $PRIVILEGED_SA_EMAIL --member="serviceAccount:$DEPLOY_SA_EMAIL" --role="roles/iam.serviceAccountTokenCreator" --quiet
     echo "Granted Service Account Token Creator role to $DEPLOY_SA_NAME for impersonating $PRIVILEGED_SA_NAME."
 
-    # Bind roles to privileged service account
-    gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$PRIVILEGED_SA_EMAIL" --role="projects/$PROJECT_ID/roles/$PRIVILEGED_ROLE_NAME" --quiet
-    echo "Custom role $PRIVILEGED_ROLE_NAME has been bound to service account $PRIVILEGED_SA_EMAIL."
-done
+    # Loop over roles for the current privileged service account
+    for role_index in "${!ROLE_NAMES_ARRAY[@]}"; do
+        PRIVILEGED_ROLE_NAME=${ROLE_NAMES_ARRAY[$role_index]}
+        PRIVILEGED_ROLE_FILE=${ROLE_FILES_ARRAY[$role_index]}
 
-# ... [the rest of your script up to secret creation]
+        # Create or update privileged role
+        create_or_update_role $PRIVILEGED_ROLE_NAME $PRIVILEGED_ROLE_FILE
+
+        # Bind roles to privileged service account
+        gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$PRIVILEGED_SA_EMAIL" --role="projects/$PROJECT_ID/roles/$PRIVILEGED_ROLE_NAME" --quiet
+        echo "Custom role $PRIVILEGED_ROLE_NAME has been bound to service account $PRIVILEGED_SA_EMAIL."
+    done
+done
 
 # Create the secret if it doesn't exist
 SECRET_EXISTS=$(gcloud secrets describe $SECRET_NAME --project=$PROJECT_ID 2>&1 | grep "name:")
