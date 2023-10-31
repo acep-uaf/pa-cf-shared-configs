@@ -48,13 +48,14 @@ The `.env` files act as configuration blueprints, containing key-value pairs tha
 
 ```bash
 PROJECT_ID=<value>
+DEPLOY_SA_NAME=<value>
 DEPLOY_ROLE_NAME=<value>
 DEPLOY_ROLE_FILE=<value>
-PRIVILEGED_ROLE_NAME=<value>
-PRIVILEGED_ROLE_FILE=<value>
-DEPLOY_SA_NAME=<value>
-PRIVILEGED_SA_NAME=<value>
 SECRET_NAME=<value>
+
+PRIVILEGED_SA_NAMES=("<value>" "<value>")
+PRIVILEGED_ROLE_NAMES=("<value>, <value>" "<value>")
+PRIVILEGED_ROLE_FILES=("<value>, <value>" "<value>")
 ```
 
 Replace <value> with the appropriate values for your deployment.
