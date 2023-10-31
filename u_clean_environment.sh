@@ -50,28 +50,32 @@ for idx in "${!PRIVILEGED_SA_NAMES[@]}"; do
 done
 
 # Check for leftover bindings and unbind if needed
+# Unbind role from service account
 unbind_role_from_service_account() {
     local ROLE_NAME=$1
     local SA_EMAIL=$2
     local FULL_ROLE_NAME="projects/$PROJECT_ID/roles/$ROLE_NAME"
-    local BINDING_EXISTS=$(gcloud projects get-iam-policy "$PROJECT_ID" --flatten="bindings[].members" --format='table(bindings.role,bindings.members)' | grep "$SA_EMAIL" | grep "$FULL_ROLE_NAME")
-
-    if echo "$BINDING_EXISTS" | grep -q "$SA_EMAIL"; then
-        gcloud projects remove-iam-policy-binding "$PROJECT_ID" --member="serviceAccount:$SA_EMAIL" --role="$FULL_ROLE_NAME" &> /dev/null
-        if [ $? -eq 0 ]; then
-            echo "Removed service account binding for $SA_EMAIL."
-        else
-            echo "Attempted to remove service account binding for $SA_EMAIL, but it was already unbound or doesn't exist."
-        fi
+    
+    gcloud projects remove-iam-policy-binding "$PROJECT_ID" --member="serviceAccount:$SA_EMAIL" --role="$FULL_ROLE_NAME" &> /dev/null
+    if [ $? -eq 0 ]; then
+        echo "Removed service account binding for $SA_EMAIL with role $ROLE_NAME."
     else
-        echo "No bindings found for $SA_EMAIL with role $FULL_ROLE_NAME."
+        echo "Attempted to remove service account binding for $SA_EMAIL with role $ROLE_NAME, but it was already unbound or doesn't exist."
     fi
 }
 
 echo "Checking and removing bindings from service accounts..."
 unbind_role_from_service_account "$DEPLOY_ROLE_NAME" "$DEPLOY_SA_EMAIL"
-for idx in "${!PRIVILEGED_SA_EMAILS[@]}"; do
-    unbind_role_from_service_account "${PRIVILEGED_ROLE_NAMES[$idx]}" "${PRIVILEGED_SA_EMAILS[$idx]}"
+
+# Loop over each privileged service account
+for idx in "${!PRIVILEGED_SA_NAMES[@]}"; do
+    SA_EMAIL="${PRIVILEGED_SA_NAMES[$idx]}@${PROJECT_ID}.iam.gserviceaccount.com"
+    
+    # Split the roles for this service account and unbind each one
+    IFS=", " read -ra roles_for_sa <<< "${PRIVILEGED_ROLE_NAMES[$idx]}"
+    for role in "${roles_for_sa[@]}"; do
+        unbind_role_from_service_account "$role" "$SA_EMAIL"
+    done
 done
 
 # Check if service accounts exist and delete them if they do
