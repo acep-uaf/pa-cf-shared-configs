@@ -58,6 +58,17 @@ PRIVILEGED_ROLE_NAMES=("<value>, <value>" "<value>")
 PRIVILEGED_ROLE_FILES=("<value>, <value>" "<value>")
 ```
 
+### Explaining the Array Syntax
+
+- **Array Representation:**
+  - Arrays are enclosed in parentheses `()` and each element is enclosed in double quotes `"`.
+
+- **Role Associations:**
+  - Multiple roles associated with a single service account are represented as comma-separated values within the same double quotes `"`.
+
+- **Ordering:**
+  - Ensure that the order of elements within `PRIVILEGED_SA_NAMES`, `PRIVILEGED_ROLE_NAMES`, and `PRIVILEGED_ROLE_FILES` are consistent. The ith service account will be associated with the ith set of roles defined using the ith set of JSON files.
+
 Replace <value> with the appropriate values for your deployment.
 
 ### Environment Variable Descriptions
