@@ -157,10 +157,16 @@ Usage:
 
 This script automates the foundational IAM setup:
 
-- **IAM Roles**: It either creates or updates custom IAM roles based on the provided JSON role definitions.
-- **Service Accounts**: Creates necessary service accounts if they don't already exist.
-- **Role Bindings**: It binds the custom roles to the respective service accounts.
-- **Secrets**: A GCP secret is created or updated then populated with the deploy service account key which is used for permission elevation for impersonation.
+- **IAM Roles**: It either creates or updates custom IAM roles based on the provided JSON role definitions. Both deploy roles and privileged roles are managed.
+- **Service Accounts**: Creates necessary service accounts if they don't already exist, including both deploy service accounts and privileged service accounts.
+- **Role Bindings**:
+  - **One-to-Many Relationship**: The script is designed to bind multiple roles to a single service account, allowing for the aggregation of necessary permissions.
+  - The script binds the custom roles to the respective service accounts. Additionally, it grants the deploy service account permission to impersonate privileged service accounts.
+- **Secrets**: A GCP secret is created or updated. If the secret does not exist, a new service account key is generated and added to the secret. This secret is used for permission elevation during impersonation.
+- **Error Handling**: The script checks for the presence of necessary variables and files, ensuring proper authentication and availability of the .env file. Errors are gracefully reported to the user with informative messages.
+- **Input**: The script prompts the user to enter the path to the `.env` file containing necessary environment variables.
+- **Idempotency**: The script is designed to be idempotent, meaning it can be run multiple times without causing unintended side effects. If a role, service account, or secret already exists, the script ensures they are updated as needed without creating duplicates.
+
 
 Usage:
 ```bash
