@@ -109,13 +109,13 @@ Roles in GCP are sets of permissions that can be granted to specific Google Clou
 
 ```bash
 {
-  "title": "custom_role_deploy",
-  "description": "Role for deploying a Cloud Function.",
-  "stage": "ALPHA",
-  "includedPermissions": [
-    "cloudfunctions.functions.create",
-    "cloudfunctions.functions.update"
-  ]
+    "title": "custom_role_pa_cf_ea_deploy",
+    "description": "Role for deploying a Cloud Function dependent on eventarc for triggers.",
+    "stage": "ALPHA",
+    "includedPermissions": [
+      "eventarc.events.receiveEvent",
+      "run.routes.invoke"
+    ]
 }
 ```
 
@@ -123,14 +123,18 @@ Roles in GCP are sets of permissions that can be granted to specific Google Clou
 
 ```bash
 {
-  "title": "custom_role_privileged",
-  "description": "Privileged role with broader permissions.",
-  "stage": "ALPHA",
-  "includedPermissions": [
-    "storage.objects.get",
-    "pubsub.topics.publish"
-  ]
-}
+    "title": "custom_role_bq_gcs_privileged",
+    "description": "Role for BigQuery operations.",
+    "stage": "ALPHA",
+    "includedPermissions": [
+      "bigquery.datasets.create",
+      "bigquery.datasets.get",
+      "bigquery.datasets.getIamPolicy",
+      "bigquery.jobs.create",
+      "storage.objects.get",
+      "storage.objects.list"
+    ]
+ }
 ```
 
 Make sure the role files are located in the same directory as the scripts, or adjust the paths in the `.env` file accordingly.
