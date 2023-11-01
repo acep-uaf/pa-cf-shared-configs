@@ -195,9 +195,26 @@ Usage:
 ### 4. u_clean_environment.sh
 When a reset is needed, this script steps in to clean up:
 
+- **Pre-checks**:
+  - **gcloud Command**: Ensures the `gcloud` command is available and executable.
+  - **Authentication**: Verifies if the user is authenticated to `gcloud`.
+  - **.env File**: Prompts the user for the path to the `.env` file and ensures it exists and is readable.
+  - **Required Variables**: Checks if all required variables are set in the `.env` file.
+
 - **Unbinding Roles**: Removes the role bindings associated with the service accounts.
-- **Service Account Deletion**: Deletes the service accounts specified in the .env file.
+  - **Thorough Unbinding**: Iterates over each privileged service account and meticulously removes each role binding.
+  - **Feedback**: Provides feedback on whether bindings were already unbound or don't exist.
+
+- **Service Account Deletion**: Deletes the service accounts specified in the `.env` file.
+  - **Existence Check**: Prior to deletion, checks if the service account exists.
+  - **Feedback**: Informs if a service account was deleted or didn't exist.
+
 - **Secret Removal**: Deletes the secrets created in the setup phase.
+  - **Existence Check**: Confirms if the secret exists before attempting deletion.
+  - **Feedback**: Informs if a secret was deleted or didn't exist.
+
+- **Cleanup Completion**: Notifies upon successful completion of the cleanup process.
+
 
 Usage:
 ```bash
