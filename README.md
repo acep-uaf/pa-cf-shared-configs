@@ -177,7 +177,15 @@ Usage:
 A diagnostic utility to validate your GCP environment:
 
 - **Configuration Checks**: Compares the current GCP environment's IAM settings against the configurations specified in the .env file.
-- **Feedback**: Provides feedback on discrepancies or confirms if everything is in order.
+  - **gcloud Command**: Verifies if the `gcloud` command is available.
+  - **Authentication**: Checks for valid gcloud authentication.
+  - **.env File**: Prompts the user for the path to the `.env` file and validates its existence and readability.
+  - **IAM Roles**: Checks for the existence of the necessary IAM roles for the deploy service account and privileged service accounts.
+  - **Service Accounts**: Checks for the existence of the deploy and privileged service accounts.
+  - **IAM Bindings**: Validates the IAM bindings for the deploy and privileged service accounts.
+  - **Secrets**: Checks for the existence of specific secrets.
+- **Feedback**: Provides feedback on discrepancies or confirms if everything is in order. Alerts if a required component like an IAM role or service account is missing or not correctly bound.
+
 
 Usage:
 ```bash
