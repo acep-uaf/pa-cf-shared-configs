@@ -297,3 +297,10 @@ Moreover, the ability to save your project's IAM policy provides a safety net, e
 By integrating these scripts into your workflow, not only do you bolster your GCP environment's security, but you also streamline the management of roles, service accounts, and bindings. Ultimately, the toolkit epitomizes efficiency, security, and the ease of IAM management on Google Cloud Platform.
 
 ---
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```
