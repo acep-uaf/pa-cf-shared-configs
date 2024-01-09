@@ -1,0 +1,15 @@
+{
+  "title": "custom_role_bq_query_privileged",
+  "description": "Privileged role for performing query operations in BigQuery.",
+  "stage": "ALPHA",
+  "includedPermissions": [
+    "bigquery.jobs.create",
+    "bigquery.jobs.get",
+    "bigquery.jobs.list",
+    "bigquery.tables.getData",
+    "bigquery.tables.list",
+    "bigquery.datasets.get"
+  ]
+}
+
+  
